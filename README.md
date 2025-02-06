@@ -1,1 +1,1 @@
-# my-fire-plane-core
+# The backend module for myFirePlane application
