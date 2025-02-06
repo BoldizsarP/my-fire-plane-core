@@ -1,0 +1,27 @@
+{
+  "name": "my-fire-plane-core",
+  "version": "1.0.0",
+  "main": "build/src/server.js",
+  "scripts": {
+    "build": "tsoa spec-and-routes && tsc",
+    "start": "node build/src/server.js",
+    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\""
+  },
+  "repository": "git@github.com:BoldizsarP/my-fire-plane-core.git",
+  "author": "Boldizsar Pal <boldizsarpal@invenshure.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.21.2",
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.6.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "@types/swagger-ui-express": "^4.1.7",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
