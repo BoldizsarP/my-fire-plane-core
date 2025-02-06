@@ -11,3 +11,4 @@ Api first approach that generates appropriate OpenAPi documentation for further 
 ## Deviations from Documentation
 
 - Moved generated "routes" from "build" to "generated"
+- Moved generated "swagger" from "build" to "generated"

@@ -7,3 +7,5 @@
 - - build
 - - start
 - - live reload (dev)
+- Added SwaggerUI
+- Default error handling
