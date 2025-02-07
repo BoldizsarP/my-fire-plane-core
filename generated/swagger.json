@@ -179,6 +179,589 @@
 				},
 				"type": "object",
 				"description": "Make all properties in T optional"
+			},
+			"Subscriptions": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"accountId": {
+						"type": "number",
+						"format": "double"
+					},
+					"subscriptionType": {
+						"type": "string"
+					},
+					"beginDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"endDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"airplaneSerialNumber": {
+						"type": "string"
+					},
+					"airplaneRegistrationNumber": {
+						"type": "string"
+					},
+					"airplaneUniqueId": {
+						"type": "string"
+					},
+					"uniqueId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"accountId",
+					"subscriptionType",
+					"beginDateTime",
+					"endDateTime",
+					"airplaneSerialNumber",
+					"airplaneRegistrationNumber",
+					"airplaneUniqueId",
+					"uniqueId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Airplane": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"registrationNumber": {
+						"type": "string"
+					},
+					"serialNumber": {
+						"type": "string"
+					},
+					"aircraftType": {
+						"type": "string"
+					},
+					"engineType": {
+						"type": "string"
+					},
+					"airplaneUniqueId": {
+						"type": "string"
+					},
+					"linkedAccount": {
+						"type": "number",
+						"format": "double"
+					},
+					"isUserDeleted": {
+						"type": "number",
+						"format": "double"
+					},
+					"liquidUnits": {
+						"type": "string"
+					},
+					"displayColor": {
+						"type": "string"
+					},
+					"airplaneName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"registrationNumber",
+					"serialNumber",
+					"aircraftType",
+					"engineType",
+					"airplaneUniqueId",
+					"linkedAccount",
+					"isUserDeleted",
+					"liquidUnits",
+					"displayColor",
+					"airplaneName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AirplaneRegistration": {
+				"properties": {
+					"errors": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"subscriptions": {
+						"items": {
+							"$ref": "#/components/schemas/Subscriptions"
+						},
+						"type": "array"
+					},
+					"newAirplaneData": {
+						"$ref": "#/components/schemas/Airplane"
+					}
+				},
+				"required": [
+					"errors",
+					"subscriptions",
+					"newAirplaneData"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GenericResponse_AirplaneRegistration_": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AirplaneRegistration"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"AirplaneCreate": {
+				"properties": {
+					"accountNumber": {
+						"type": "number",
+						"format": "double"
+					},
+					"registrationNumber": {
+						"type": "string"
+					},
+					"serialNumber": {
+						"type": "string"
+					},
+					"aircraftType": {
+						"type": "string"
+					},
+					"engineType": {
+						"type": "string"
+					},
+					"liquidUnits": {
+						"type": "string"
+					},
+					"airplaneName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"accountNumber",
+					"registrationNumber",
+					"serialNumber",
+					"aircraftType",
+					"engineType",
+					"liquidUnits",
+					"airplaneName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GenericResponse__allAirplanes-Airplane--errors-string-Array__": {
+				"allOf": [
+					{
+						"properties": {
+							"errors": {
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							"allAirplanes": {
+								"$ref": "#/components/schemas/Airplane"
+							}
+						},
+						"required": [
+							"errors",
+							"allAirplanes"
+						],
+						"type": "object"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"RecordType": {
+				"enum": [
+					"START",
+					"LANDING",
+					"ENGINEHOURS",
+					"ERROR"
+				],
+				"type": "string"
+			},
+			"ActionType": {
+				"enum": [
+					"ADD",
+					"SUBTRACT",
+					"ADJUST",
+					"ERROR"
+				],
+				"type": "string"
+			},
+			"AgAirplaneCounters": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"airplaneUniqueId": {
+						"type": "string"
+					},
+					"recordType": {
+						"$ref": "#/components/schemas/RecordType"
+					},
+					"actionType": {
+						"$ref": "#/components/schemas/ActionType"
+					},
+					"actionValue": {
+						"type": "number",
+						"format": "double"
+					},
+					"recordDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isMobileEntry": {
+						"type": "boolean"
+					},
+					"mobileEntryDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"entryUser": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"airplaneUniqueId",
+					"recordType",
+					"actionType",
+					"actionValue",
+					"recordDateTime",
+					"entryUser"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllCountersForAirplaneResuls": {
+				"properties": {
+					"countersStarts": {
+						"items": {
+							"$ref": "#/components/schemas/AgAirplaneCounters"
+						},
+						"type": "array"
+					},
+					"countersLandings": {
+						"items": {
+							"$ref": "#/components/schemas/AgAirplaneCounters"
+						},
+						"type": "array"
+					},
+					"countersEngineHours": {
+						"items": {
+							"$ref": "#/components/schemas/AgAirplaneCounters"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"countersStarts",
+					"countersLandings",
+					"countersEngineHours"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EngineRuns": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"AirplaneUniqueId": {
+						"type": "string"
+					},
+					"altitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"temperature": {
+						"type": "number",
+						"format": "double"
+					},
+					"targetTorque": {
+						"type": "number",
+						"format": "double"
+					},
+					"ngRef": {
+						"type": "number",
+						"format": "double"
+					},
+					"ittRef": {
+						"type": "number",
+						"format": "double"
+					},
+					"wfRef": {
+						"type": "number",
+						"format": "double"
+					},
+					"ng": {
+						"type": "number",
+						"format": "double"
+					},
+					"itt": {
+						"type": "number",
+						"format": "double"
+					},
+					"wf": {
+						"type": "number",
+						"format": "double"
+					},
+					"recordDateTime": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"AirplaneUniqueId",
+					"altitude",
+					"temperature",
+					"targetTorque",
+					"ngRef",
+					"ittRef",
+					"wfRef",
+					"ng",
+					"itt",
+					"wf",
+					"recordDateTime"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LatestCyclesRecord": {
+				"properties": {
+					"jsonData": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"jsonData"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAirplaneReport": {
+				"properties": {
+					"noErrors": {
+						"type": "boolean"
+					},
+					"invalidAirplane": {
+						"type": "boolean"
+					},
+					"ReportGeneratedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"CurrentTotals": {
+						"$ref": "#/components/schemas/GetAllCountersForAirplaneResuls"
+					},
+					"AirplaneCounters": {
+						"$ref": "#/components/schemas/GetAllCountersForAirplaneResuls"
+					},
+					"last7Days_Starts": {
+						"type": "number",
+						"format": "double"
+					},
+					"last7Days_Landings": {
+						"type": "number",
+						"format": "double"
+					},
+					"last7Days_Hours": {
+						"type": "number",
+						"format": "double"
+					},
+					"last30Days_Starts": {
+						"type": "number",
+						"format": "double"
+					},
+					"last30Days_Landings": {
+						"type": "number",
+						"format": "double"
+					},
+					"last30Days_Hours": {
+						"type": "number",
+						"format": "double"
+					},
+					"ytd_Starts": {
+						"type": "number",
+						"format": "double"
+					},
+					"ytd_Landings": {
+						"type": "number",
+						"format": "double"
+					},
+					"ytd_Hours": {
+						"type": "number",
+						"format": "double"
+					},
+					"engineRuns": {
+						"$ref": "#/components/schemas/EngineRuns"
+					},
+					"cycles": {
+						"$ref": "#/components/schemas/LatestCyclesRecord"
+					}
+				},
+				"required": [
+					"noErrors",
+					"invalidAirplane",
+					"ReportGeneratedDate",
+					"CurrentTotals",
+					"AirplaneCounters",
+					"last7Days_Starts",
+					"last7Days_Landings",
+					"last7Days_Hours",
+					"last30Days_Starts",
+					"last30Days_Landings",
+					"last30Days_Hours",
+					"ytd_Starts",
+					"ytd_Landings",
+					"ytd_Hours",
+					"engineRuns",
+					"cycles"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GenericResponse_GetAirplaneReport_": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/GetAirplaneReport"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"Pick_Airplane.displayColor-or-liquidUnits-or-registrationNumber-or-airplaneName_": {
+				"properties": {
+					"displayColor": {
+						"type": "string"
+					},
+					"liquidUnits": {
+						"type": "string"
+					},
+					"registrationNumber": {
+						"type": "string"
+					},
+					"airplaneName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"displayColor",
+					"liquidUnits",
+					"registrationNumber",
+					"airplaneName"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"AirplanePatch": {
+				"$ref": "#/components/schemas/Pick_Airplane.displayColor-or-liquidUnits-or-registrationNumber-or-airplaneName_"
+			},
+			"GenericResponse_AirplanePatch-and-_changedUniqueId-string--authorizedToChange-boolean--changedRegistrationNumber-boolean__": {
+				"allOf": [
+					{
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/AirplanePatch"
+							},
+							{
+								"properties": {
+									"changedRegistrationNumber": {
+										"type": "boolean"
+									},
+									"authorizedToChange": {
+										"type": "boolean"
+									},
+									"changedUniqueId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"changedRegistrationNumber",
+									"authorizedToChange",
+									"changedUniqueId"
+								],
+								"type": "object"
+							}
+						]
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"GenericResponse__jsonData-string__": {
+				"allOf": [
+					{
+						"properties": {
+							"jsonData": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"jsonData"
+						],
+						"type": "object"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
 			}
 		},
 		"securitySchemes": {}
@@ -410,6 +993,219 @@
 						}
 					}
 				}
+			}
+		},
+		"/airplanes": {
+			"post": {
+				"operationId": "CreateAirplane",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse_AirplaneRegistration_"
+								}
+							}
+						}
+					}
+				},
+				"description": "RegisterNewAirplane",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AirplaneCreate"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/accounts/{accountId}/airplanes": {
+			"get": {
+				"operationId": "GetAccountAirplanes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse__allAirplanes-Airplane--errors-string-Array__"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "accountId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/airplanes/{airplaneId}/report": {
+			"get": {
+				"operationId": "GetAirplaneReport",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse_GetAirplaneReport_"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "airplaneId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/airplanes/{airplaneId}": {
+			"patch": {
+				"operationId": "UpdateAirplane",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse_AirplanePatch-and-_changedUniqueId-string--authorizedToChange-boolean--changedRegistrationNumber-boolean__"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "airplaneId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"allOf": [
+									{
+										"properties": {
+											"linkedAccount": {
+												"type": "number",
+												"format": "double"
+											}
+										},
+										"required": [
+											"linkedAccount"
+										],
+										"type": "object"
+									},
+									{
+										"$ref": "#/components/schemas/AirplanePatch"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/airplanes/{airplaneId}/interface": {
+			"put": {
+				"operationId": "UpdateAirplaneInterface",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse____"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "airplaneId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"jsonData": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"jsonData"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAirplaneInterface",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse__jsonData-string__"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "airplaneId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},
