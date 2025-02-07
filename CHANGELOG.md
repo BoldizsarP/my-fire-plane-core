@@ -1,3 +1,7 @@
+2025-02-07
+
+- Adding linked users API
+
 2025-02-06 [alpha]
 
 - Adding TSOA

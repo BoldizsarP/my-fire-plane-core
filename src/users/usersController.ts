@@ -2,15 +2,23 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Patch,
   Path,
   Post,
+  Put,
   Query,
   Route,
   SuccessResponse,
 } from "tsoa";
 import { User } from "./user";
 import { UsersService, UserCreationParams } from "./usersService";
+import {
+  AdditionalUserFormat,
+  AdditionalUsersReturn,
+} from "../source.files/AgAppAdditionalUsers";
+import { GenericResponse } from "../source.files/defaults";
 
 @Route("users")
 export class UsersController extends Controller {

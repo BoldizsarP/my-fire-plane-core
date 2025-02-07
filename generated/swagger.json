@@ -67,6 +67,118 @@
 			},
 			"UserCreationParams": {
 				"$ref": "#/components/schemas/Pick_User.email-or-name-or-phoneNumbers_"
+			},
+			"UserRoles": {
+				"enum": [
+					"ADMIN",
+					"PILOT",
+					"MX",
+					"OBS"
+				],
+				"type": "string"
+			},
+			"AdditionalUserFormat": {
+				"properties": {
+					"userName": {
+						"type": "string"
+					},
+					"actualName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"permissionsData": {
+						"$ref": "#/components/schemas/UserRoles"
+					}
+				},
+				"required": [
+					"userName",
+					"actualName",
+					"email",
+					"permissionsData"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AdditionalUsersReturn": {
+				"properties": {
+					"additionalUsers": {
+						"items": {
+							"$ref": "#/components/schemas/AdditionalUserFormat"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"additionalUsers"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GenericResponse_AdditionalUsersReturn_": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AdditionalUsersReturn"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"GenericResponse____": {
+				"allOf": [
+					{
+						"properties": {},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"noErrors": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"noErrors"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"Pick_AdditionalUserFormat.userName_": {
+				"properties": {
+					"userName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userName"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Partial_Omit_AdditionalUserFormat.userName__": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"actualName": {
+						"type": "string"
+					},
+					"permissionsData": {
+						"$ref": "#/components/schemas/UserRoles"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
 			}
 		},
 		"securitySchemes": {}
@@ -136,6 +248,164 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserCreationParams"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/linked/{linkedAccount}": {
+			"get": {
+				"operationId": "GetLinkedUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse_AdditionalUsersReturn_"
+								}
+							}
+						}
+					}
+				},
+				"description": "AgAppAdditionalUsers.GetAdditionalUsers\nFacilitates getting all linked users",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "linkedAccount",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "AddLinkedUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse_AdditionalUsersReturn_"
+								}
+							}
+						}
+					}
+				},
+				"description": "AgAppAdditionalUsers.AddAdditionalUserResults\nFacilitates adding a new user under a linked account",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "linkedAccount",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AdditionalUserFormat"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteLinkedUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse____"
+								}
+							}
+						}
+					}
+				},
+				"description": "AgAppAdditionalUsers.DeleteAdditionalUser\nDeletes a linked user",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "linkedAccount",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Pick_AdditionalUserFormat.userName_"
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"operationId": "UpdateLinkedUserPassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GenericResponse____"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "linkedAccount",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"allOf": [
+									{
+										"$ref": "#/components/schemas/Partial_Omit_AdditionalUserFormat.userName__"
+									},
+									{
+										"properties": {
+											"userName": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"userName"
+										],
+										"type": "object"
+									}
+								]
 							}
 						}
 					}
