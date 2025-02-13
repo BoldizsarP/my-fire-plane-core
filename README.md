@@ -12,3 +12,7 @@ Api first approach that generates appropriate OpenAPi documentation for further 
 
 - Moved generated "routes" from "build" to "generated"
 - Moved generated "swagger" from "build" to "generated"
+
+# Prisma
+
+Prisma is used for database connections

@@ -1,3 +1,8 @@
+2025-02-13
+
+- Adding docker compose file for sqlserver
+- Adding prisma as database manager
+
 2025-02-07
 
 - Adding linked users API
