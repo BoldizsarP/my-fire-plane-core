@@ -1,0 +1,346 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model MigrationHistory {
+  MigrationId    String @db.NVarChar(150)
+  ContextKey     String @db.NVarChar(300)
+  Model          Bytes
+  ProductVersion String @db.NVarChar(32)
+
+  @@id([MigrationId, ContextKey], map: "PK_dbo.__MigrationHistory")
+  @@map("__MigrationHistory")
+}
+
+model AgAccounts {
+  ID                   Int       @unique @default(autoincrement())
+  AccountEmail         String    @db.VarChar(250)
+  WebDashboardPassword String    @db.VarChar(50)
+  LogoUrl              String?   @db.VarChar(250)
+  LogoVersion          Int?
+  CreatedDateTime      DateTime? @db.DateTime
+  PremiumRequest       String?   @db.VarChar(500)
+}
+
+model AgAdditionalUsers {
+  ID              Int      @unique @default(autoincrement())
+  UserName        String   @db.VarChar(100)
+  ActualName      String   @db.VarChar(100)
+  Email           String?  @db.VarChar(100)
+  Password        String   @db.VarChar(50)
+  linkedAccount   Int
+  PermissionsData String?  @db.VarChar(250)
+  isUserDeleted   Boolean?
+}
+
+model AgAirplanes {
+  ID                 Int     @unique @default(autoincrement())
+  RegistrationNumber String  @db.VarChar(50)
+  SerialNumber       String  @db.VarChar(50)
+  AircraftType       String  @db.VarChar(50)
+  EngineType         String  @db.VarChar(50)
+  AirplaneUniqueId   String  @db.VarChar(50)
+  LinkedAccount      Int
+  isUserDeleted      Boolean
+  LiquidUnits        String? @db.VarChar(50)
+  DisplayColor       String? @db.VarChar(50)
+  AirplaneName       String? @db.VarChar(50)
+  PerformanceConfig  String? @db.VarChar(250)
+  HobbsCorrection    String? @db.VarChar(250)
+  Interfaces         String? @db.VarChar(250)
+  CustomCounterDefs  String? @db.VarChar(5000)
+}
+
+model AgAirplaneSquawks {
+  ID               Int       @unique @default(autoincrement())
+  AirplaneUniqueId String    @db.VarChar(50)
+  AccountNumber    Int
+  SquawkSummary    String    @db.VarChar(250)
+  SquawkedBy       String    @db.VarChar(250)
+  SquawkedOn       DateTime  @db.DateTime
+  Urgency          Int
+  SquawkJson       String?   @db.VarChar(Max)
+  ClosedBy         String?   @db.VarChar(250)
+  ClosedOn         DateTime? @db.DateTime
+  ClosedJson       String?   @db.VarChar(Max)
+  isUserDeleted    Boolean?
+  DeferredBy       String?   @db.VarChar(250)
+  DeferredOn       DateTime? @db.DateTime
+  DeferredJson     String?   @db.VarChar(Max)
+}
+
+model AgCounters {
+  ID                  Int       @unique @default(autoincrement())
+  AirplaneUniqueId    String    @db.VarChar(50)
+  RecordType          String    @db.VarChar(20)
+  ActionType          String    @db.VarChar(20)
+  ActionValue         Float
+  RecordDateTime      DateTime  @db.DateTime
+  IsMobileEntry       Boolean?
+  MobileEntryDateTime DateTime? @db.DateTime
+  EntryUser           String?   @db.VarChar(50)
+}
+
+model AgCycles {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  isInitialized    Boolean
+  RecordDate       DateTime @db.DateTime
+  JsonData         String?  @db.VarChar(Max)
+}
+
+model AgEngineRuns {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  Altitude         Float
+  Temperature      Float
+  TargetTorque     Float
+  NgRef            Float
+  IttRef           Float
+  WfRef            Float
+  Ng               Float
+  Itt              Float
+  Wf               Float
+  RecordDateTime   DateTime @db.DateTime
+  isUserDeleted    Boolean?
+}
+
+model AgInterfaceOps {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  OpDateTime       DateTime @db.DateTime
+  InterfaceName    String   @db.VarChar(50)
+  OpType           String   @db.VarChar(50)
+  OpResult         String   @db.VarChar(50)
+  JsonData         String   @db.VarChar(Max)
+}
+
+model AgMfratEntries {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  SavedDateTime    DateTime @db.DateTime
+  JsonData         String   @db.VarChar(Max)
+  CreatedBy        String   @db.VarChar(200)
+}
+
+model AgNotifications {
+  ID                     Int      @unique @default(autoincrement())
+  DistributionType       String   @db.VarChar(50)
+  CreationDateTime       DateTime @db.DateTime
+  ExpiryDateTime         DateTime @db.DateTime
+  AccountNumber          Int
+  DeviceKey              String   @db.VarChar(50)
+  NotificationSimpleText String?  @db.VarChar(Max)
+  NotificationHtml       String?  @db.VarChar(Max)
+}
+
+model AgPerfEntries {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  SavedDateTime    DateTime @db.DateTime
+  JsonData         String   @db.VarChar(Max)
+  CreatedBy        String   @db.VarChar(200)
+}
+
+model AgQuizAssignments {
+  ID             Int      @unique @default(autoincrement())
+  AccountNumber  Int
+  SavedDateTime  DateTime @db.DateTime
+  DueDate        DateTime @db.DateTime
+  AssignmentName String   @db.VarChar(200)
+  AssignedBy     String   @db.VarChar(200)
+  IsComplete     Boolean
+  QuizIDs        String   @db.VarChar(500)
+  AssignedUsers  String   @db.VarChar(2000)
+}
+
+model AgQuizAttempts {
+  ID                  Int      @unique @default(autoincrement())
+  AccountNumber       Int
+  SavedDateTime       DateTime @db.DateTime
+  JsonData            String   @db.VarChar(Max)
+  AttemptUser         String   @db.VarChar(200)
+  IsUserDeleted       Boolean
+  IsUserAvailable     Boolean
+  NumQuestions        Int
+  NumQuestionsCorrect Int
+  QuizID              Int
+  AssignmentID        Int
+}
+
+model AgQuizes {
+  ID              Int      @unique @default(autoincrement())
+  AccountNumber   Int
+  SavedDateTime   DateTime @db.DateTime
+  JsonData        String   @db.VarChar(Max)
+  CreatedBy       String   @db.VarChar(200)
+  Category        String   @db.VarChar(200)
+  IsUserDeleted   Boolean?
+  IsUserAvailable Boolean?
+}
+
+model AgQuizQuestions {
+  ID            Int      @unique @default(autoincrement())
+  AccountNumber Int
+  SavedDateTime DateTime @db.DateTime
+  JsonData      String   @db.VarChar(Max)
+  CreatedBy     String   @db.VarChar(200)
+  Category      String   @db.VarChar(200)
+}
+
+model AgQuizUserAssignments {
+  ID            Int      @unique @default(autoincrement())
+  AccountNumber Int
+  UserName      String   @db.VarChar(200)
+  AssignmentID  Int
+  QuizID        Int
+  DueDate       DateTime @db.DateTime
+  IsComplete    Boolean
+}
+
+model AgStripePaymentIntents {
+  ID                 Int      @unique @default(autoincrement())
+  AccountNumber      Int
+  DateCreated        DateTime @db.Date
+  PaymentIntentId    String   @db.VarChar(250)
+  PaymentAmountCents Int
+  CartItemsJson      String   @db.VarChar(Max)
+  ChargeCompleted    Boolean?
+  IgnoreRecord       Boolean?
+  ChargeId           String?  @db.VarChar(250)
+}
+
+model AgStripePayments {
+  ID             Int      @unique @default(autoincrement())
+  ChargeDateTime DateTime @db.Date
+  chargeJson     String   @db.VarChar(Max)
+  AccountNumber  Int
+}
+
+model AgSubscriptionRedemptions {
+  ID                               Int      @unique @default(autoincrement())
+  AccountNumber                    Int
+  RedemptionDateTime               DateTime @db.DateTime
+  PaymentIntentId                  String   @db.VarChar(250)
+  ChargeId                         String   @db.VarChar(250)
+  AirplaneUniqueId                 String   @db.VarChar(50)
+  BeforeRedemptionSubscriptionType String   @db.VarChar(50)
+  BeforeRedemptionBeginDateTime    DateTime @db.DateTime
+  BeforeRedemptionEndDateTime      DateTime @db.DateTime
+  AfterRedemptionSubscriptionType  String   @db.VarChar(50)
+  AfterRedemptionBeginDateTime     DateTime @db.DateTime
+  AfterRedemptionEndDateTime       DateTime @db.DateTime
+  RedemptionTrigger                String   @db.VarChar(50)
+}
+
+model AgSubscriptions {
+  ID                         Int      @unique @default(autoincrement())
+  AccountId                  Int
+  SubscriptionType           String   @db.VarChar(50)
+  BeginDateTime              DateTime @db.DateTime
+  EndDateTime                DateTime @db.DateTime
+  AirplaneSerialNumber       String?  @db.VarChar(50)
+  AirplaneRegistrationNumber String?  @db.VarChar(50)
+  AirplaneUniqueId           String?  @db.VarChar(50)
+  UniqueId                   String   @db.VarChar(50)
+}
+
+model AgTrainingConfigs {
+  ID            Int      @unique @default(autoincrement())
+  AccountNumber Int
+  SavedDateTime DateTime @db.DateTime
+  JsonData      String   @db.VarChar(Max)
+  AdminList     String   @db.VarChar(500)
+}
+
+model AgTransferCodes {
+  ID                  Int      @unique @default(autoincrement())
+  CodeUniqueId        String   @db.VarChar(20)
+  AirplaneUniqueId    String   @db.VarChar(50)
+  OriginAccount       Int
+  CodeCreatedDateTime DateTime @db.Date
+  CodeExpiryDateTime  DateTime @db.Date
+  HasBeenClaimed      Boolean
+}
+
+model AgWbConfigs {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  ConfigDateTime   DateTime @db.DateTime
+  JsonData         String   @db.VarChar(Max)
+  IsUserDeleted    Boolean?
+}
+
+model AgWbEntries {
+  ID               Int      @unique @default(autoincrement())
+  AirplaneUniqueId String   @db.VarChar(50)
+  SavedDateTime    DateTime @db.DateTime
+  JsonData         String   @db.VarChar(Max)
+  CreatedBy        String   @db.VarChar(200)
+  IsUserDeleted    Boolean?
+}
+
+model AgWbEquipLists {
+  ID               Int      @unique @default(autoincrement())
+  UniqueId         String   @db.VarChar(50)
+  AirplaneUniqueId String   @db.VarChar(50)
+  LinkedAccount    Int
+  ConfigDateTime   DateTime @db.DateTime
+  JsonData         String   @db.VarChar(Max)
+}
+
+model FaaAirportData {
+  ID                             Int     @unique @default(autoincrement())
+  SiteNumber                     String? @db.VarChar(50)
+  State                          String? @db.VarChar(50)
+  BaseEndId                      String? @db.VarChar(50)
+  RunwayLength                   String? @db.VarChar(50)
+  RunwayWidth                    String? @db.VarChar(50)
+  BaseEndTrueAlignment           String? @db.VarChar(50)
+  BaseEndPhysicalLatitude        String? @db.VarChar(50)
+  BaseEndPhysicalLongitude       String? @db.VarChar(50)
+  BaseEndPhysicalElevation       String? @db.VarChar(50)
+  ReciprocalEndID                String? @db.VarChar(50)
+  ReciprocalEndTrueAlignment     String? @db.VarChar(50)
+  ReciprocalEndPhysicalLatitude  String? @db.VarChar(50)
+  ReciprocalEndPhysicalLongitude String? @db.VarChar(50)
+  ReciprocalEndPhysicalElevation String? @db.VarChar(50)
+  LocationID                     String? @db.VarChar(50)
+  County                         String? @db.VarChar(50)
+  City                           String? @db.VarChar(50)
+  FacilityName                   String? @db.VarChar(50)
+  ARPLatitude                    String? @db.VarChar(50)
+  ARPLongitude                   String? @db.VarChar(50)
+  ARPElevation                   String? @db.VarChar(50)
+  IcaoIdentifier                 String? @db.VarChar(50)
+  Column_22                      String? @map("Column 22") @db.VarChar(50)
+}
+
+model FleetReports {
+  ID             Int      @unique @default(autoincrement())
+  UniqueId       String   @db.VarChar(20)
+  ReportType     String   @db.VarChar(20)
+  JsonData       String   @db.VarChar(Max)
+  ReportDateTime DateTime @db.DateTime
+}
+
+model NonFaaAirports {
+  ID                Int     @unique @default(autoincrement())
+  ident             String  @db.NVarChar(50)
+  type              String  @db.NVarChar(50)
+  name              String  @db.NVarChar(100)
+  latitude_deg      Float
+  longitude_deg     Float
+  elevation_ft      Int?
+  continent         String  @db.NVarChar(50)
+  iso_country       String  @db.NVarChar(50)
+  iso_region        String  @db.NVarChar(50)
+  scheduled_service String  @db.NVarChar(50)
+  gps_code          String? @db.NVarChar(50)
+  iata_code         String? @db.NVarChar(50)
+}

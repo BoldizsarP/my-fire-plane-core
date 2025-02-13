@@ -1,0 +1,38 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "31433:1433"
+    volumes:
+      # Persist SQL Server data
+      - sql_data:/var/opt/mssql
+      # # Mount the local bacpac folder into the container
+      # - ./bacpac:/bacpac
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  import:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: import
+    depends_on:
+      - sqlserver
+        # condition: service_healthy
+    volumes:
+      - ./bacpac:/bacpac
+    # The import container will sleep for a short time (to allow the SQL Server service to start)
+    # then run sqlpackage to import the bacpac file.
+    command: tail -f /dev/null
+    # command: >
+    #   /bin/sh -c "sleep 30 &&
+    #   /opt/mssql-tools/bin/sqlpackage /Action:Import /SourceFile:/bacpac/yourfile.bacpac /TargetServerName:sqlserver /TargetDatabaseName:YourDatabase /TargetUser:sa /TargetPassword:YourStrong!Passw0rd"
+
+volumes:
+  sql_data:
