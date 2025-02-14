@@ -47,3 +47,8 @@ export interface CustomCounter {
   recordType: string; //This is what is used in the database to look up the records (unique code)
   buttonIncrement: number; //double;
 }
+
+export interface HobbsCorrectionFormat {
+  UseCorrection: boolean;
+  CorrectionHours: number;
+}

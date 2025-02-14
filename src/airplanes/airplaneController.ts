@@ -16,6 +16,7 @@ import {
   AirplanePatch,
   AirplaneRegistration,
   CustomCounter,
+  HobbsCorrectionFormat,
 } from "../source.files/airplane";
 import { GetAirplaneReport } from "../source.files/AgAppAirplaneReport";
 
@@ -64,6 +65,28 @@ export class AirplanesController extends Controller {
       }
     >
   > {
+    return {} as any;
+  }
+
+  @Get("hobs-correction")
+  //   GetHobbsCorrection
+  public async getHobbsCorrection(
+    @Path()
+    airplaneId: string
+  ): Promise<
+    GenericResponse<{
+      correction: HobbsCorrectionFormat;
+    }>
+  > {
+    return {} as any;
+  }
+  @Put("hobs-correction")
+  //   GetHobbsCorrection
+  public async putHobbsCorrection(
+    @Path()
+    airplaneId: string,
+    @Body() requestBody: { correction: HobbsCorrectionFormat }
+  ): Promise<GenericResponse<{}>> {
     return {} as any;
   }
 }

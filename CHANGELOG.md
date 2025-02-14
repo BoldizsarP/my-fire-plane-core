@@ -1,6 +1,10 @@
 2025-02-14
 
 - Adding LinkedAccount foreign keys
+- Added API shape for
+- - App_Code/AgApi/AgAppAirplaneSquawks.cs
+- - App_Code/AgApi/AgAppBinder.cs
+- - App_Code/AgApi/AgAppCounters.cs
 
 2025-02-13
 
