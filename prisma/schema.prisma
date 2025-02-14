@@ -18,17 +18,28 @@ model MigrationHistory {
 }
 
 model AgAccounts {
-  ID                   Int                 @unique @default(autoincrement())
-  AccountEmail         String              @db.VarChar(250)
-  WebDashboardPassword String              @db.VarChar(50)
-  LogoUrl              String?             @db.VarChar(250)
-  LogoVersion          Int?
-  CreatedDateTime      DateTime?           @db.DateTime
-  PremiumRequest       String?             @db.VarChar(500)
-  AgSubscriptions      AgSubscriptions[]
-  AgWbEquipLists       AgWbEquipLists[]
-  AgAdditionalUsers    AgAdditionalUsers[]
-  AgAirplanes          AgAirplanes[]
+  ID                        Int                         @unique @default(autoincrement())
+  AccountEmail              String                      @db.VarChar(250)
+  WebDashboardPassword      String                      @db.VarChar(50)
+  LogoUrl                   String?                     @db.VarChar(250)
+  LogoVersion               Int?
+  CreatedDateTime           DateTime?                   @db.DateTime
+  PremiumRequest            String?                     @db.VarChar(500)
+  AgSubscriptions           AgSubscriptions[]
+  AgWbEquipLists            AgWbEquipLists[]
+  AgAdditionalUsers         AgAdditionalUsers[]
+  AgAirplanes               AgAirplanes[]
+  AgAirplaneSquawks         AgAirplaneSquawks[]
+  AgNotifications           AgNotifications[]
+  AgQuizAssignments         AgQuizAssignments[]
+  AgQuizAttempts            AgQuizAttempts[]
+  AgQuizes                  AgQuizes[]
+  AgQuizQuestions           AgQuizQuestions[]
+  AgQuizUserAssignments     AgQuizUserAssignments[]
+  AgStripePaymentIntents    AgStripePaymentIntents[]
+  AgStripePayments          AgStripePayments[]
+  AgSubscriptionRedemptions AgSubscriptionRedemptions[]
+  AgTrainingConfigs         AgTrainingConfigs[]
 }
 
 model AgAdditionalUsers {
@@ -80,6 +91,7 @@ model AgAirplaneSquawks {
   AirplaneUniqueId String      @db.VarChar(50)
   airplane         AgAirplanes @relation(fields: [AirplaneUniqueId], references: [AirplaneUniqueId])
   AccountNumber    Int
+  account          AgAccounts  @relation(fields: [AccountNumber], references: [ID], onDelete: NoAction, onUpdate: NoAction)
   SquawkSummary    String      @db.VarChar(250)
   SquawkedBy       String      @db.VarChar(250)
   SquawkedOn       DateTime    @db.DateTime
@@ -154,14 +166,16 @@ model AgMfratEntries {
 }
 
 model AgNotifications {
-  ID                     Int      @unique @default(autoincrement())
-  DistributionType       String   @db.VarChar(50)
-  CreationDateTime       DateTime @db.DateTime
-  ExpiryDateTime         DateTime @db.DateTime
-  AccountNumber          Int
-  DeviceKey              String   @db.VarChar(50)
-  NotificationSimpleText String?  @db.VarChar(Max)
-  NotificationHtml       String?  @db.VarChar(Max)
+  ID               Int        @unique @default(autoincrement())
+  DistributionType String     @db.VarChar(50)
+  CreationDateTime DateTime   @db.DateTime
+  ExpiryDateTime   DateTime   @db.DateTime
+  AccountNumber    Int
+  account          AgAccounts @relation(fields: [AccountNumber], references: [ID])
+
+  DeviceKey              String  @db.VarChar(50)
+  NotificationSimpleText String? @db.VarChar(Max)
+  NotificationHtml       String? @db.VarChar(Max)
 }
 
 model AgPerfEntries {
@@ -174,23 +188,25 @@ model AgPerfEntries {
 }
 
 model AgQuizAssignments {
-  ID             Int      @unique @default(autoincrement())
+  ID             Int        @unique @default(autoincrement())
   AccountNumber  Int
-  SavedDateTime  DateTime @db.DateTime
-  DueDate        DateTime @db.DateTime
-  AssignmentName String   @db.VarChar(200)
-  AssignedBy     String   @db.VarChar(200)
+  account        AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  SavedDateTime  DateTime   @db.DateTime
+  DueDate        DateTime   @db.DateTime
+  AssignmentName String     @db.VarChar(200)
+  AssignedBy     String     @db.VarChar(200)
   IsComplete     Boolean
-  QuizIDs        String   @db.VarChar(500)
-  AssignedUsers  String   @db.VarChar(2000)
+  QuizIDs        String     @db.VarChar(500)
+  AssignedUsers  String     @db.VarChar(2000)
 }
 
 model AgQuizAttempts {
-  ID                  Int      @unique @default(autoincrement())
+  ID                  Int        @unique @default(autoincrement())
   AccountNumber       Int
-  SavedDateTime       DateTime @db.DateTime
-  JsonData            String   @db.VarChar(Max)
-  AttemptUser         String   @db.VarChar(200)
+  account             AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  SavedDateTime       DateTime   @db.DateTime
+  JsonData            String     @db.VarChar(Max)
+  AttemptUser         String     @db.VarChar(200)
   IsUserDeleted       Boolean
   IsUserAvailable     Boolean
   NumQuestions        Int
@@ -200,57 +216,63 @@ model AgQuizAttempts {
 }
 
 model AgQuizes {
-  ID              Int      @unique @default(autoincrement())
+  ID              Int        @unique @default(autoincrement())
   AccountNumber   Int
-  SavedDateTime   DateTime @db.DateTime
-  JsonData        String   @db.VarChar(Max)
-  CreatedBy       String   @db.VarChar(200)
-  Category        String   @db.VarChar(200)
+  account         AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  SavedDateTime   DateTime   @db.DateTime
+  JsonData        String     @db.VarChar(Max)
+  CreatedBy       String     @db.VarChar(200)
+  Category        String     @db.VarChar(200)
   IsUserDeleted   Boolean?
   IsUserAvailable Boolean?
 }
 
 model AgQuizQuestions {
-  ID            Int      @unique @default(autoincrement())
+  ID            Int        @unique @default(autoincrement())
   AccountNumber Int
-  SavedDateTime DateTime @db.DateTime
-  JsonData      String   @db.VarChar(Max)
-  CreatedBy     String   @db.VarChar(200)
-  Category      String   @db.VarChar(200)
+  account       AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  SavedDateTime DateTime   @db.DateTime
+  JsonData      String     @db.VarChar(Max)
+  CreatedBy     String     @db.VarChar(200)
+  Category      String     @db.VarChar(200)
 }
 
 model AgQuizUserAssignments {
-  ID            Int      @unique @default(autoincrement())
+  ID            Int        @unique @default(autoincrement())
   AccountNumber Int
-  UserName      String   @db.VarChar(200)
+  account       AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  UserName      String     @db.VarChar(200)
   AssignmentID  Int
   QuizID        Int
-  DueDate       DateTime @db.DateTime
+  DueDate       DateTime   @db.DateTime
   IsComplete    Boolean
 }
 
 model AgStripePaymentIntents {
-  ID                 Int      @unique @default(autoincrement())
+  ID                 Int        @unique @default(autoincrement())
   AccountNumber      Int
-  DateCreated        DateTime @db.Date
-  PaymentIntentId    String   @db.VarChar(250)
+  account            AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  DateCreated        DateTime   @db.Date
+  PaymentIntentId    String     @db.VarChar(250)
   PaymentAmountCents Int
-  CartItemsJson      String   @db.VarChar(Max)
+  CartItemsJson      String     @db.VarChar(Max)
   ChargeCompleted    Boolean?
   IgnoreRecord       Boolean?
-  ChargeId           String?  @db.VarChar(250)
+  ChargeId           String?    @db.VarChar(250)
 }
 
 model AgStripePayments {
-  ID             Int      @unique @default(autoincrement())
-  ChargeDateTime DateTime @db.Date
-  chargeJson     String   @db.VarChar(Max)
+  ID             Int        @unique @default(autoincrement())
+  ChargeDateTime DateTime   @db.Date
+  chargeJson     String     @db.VarChar(Max)
   AccountNumber  Int
+  account        AgAccounts @relation(fields: [AccountNumber], references: [ID])
 }
 
 model AgSubscriptionRedemptions {
   ID                               Int         @unique @default(autoincrement())
   AccountNumber                    Int
+  account                          AgAccounts  @relation(fields: [AccountNumber], references: [ID], onDelete: NoAction, onUpdate: NoAction)
   RedemptionDateTime               DateTime    @db.DateTime
   PaymentIntentId                  String      @db.VarChar(250)
   ChargeId                         String      @db.VarChar(250)
@@ -280,11 +302,12 @@ model AgSubscriptions {
 }
 
 model AgTrainingConfigs {
-  ID            Int      @unique @default(autoincrement())
+  ID            Int        @unique @default(autoincrement())
   AccountNumber Int
-  SavedDateTime DateTime @db.DateTime
-  JsonData      String   @db.VarChar(Max)
-  AdminList     String   @db.VarChar(500)
+  account       AgAccounts @relation(fields: [AccountNumber], references: [ID])
+  SavedDateTime DateTime   @db.DateTime
+  JsonData      String     @db.VarChar(Max)
+  AdminList     String     @db.VarChar(500)
 }
 
 model AgTransferCodes {

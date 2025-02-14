@@ -1,3 +1,7 @@
+2025-02-14
+
+- Adding LinkedAccount foreign keys
+
 2025-02-13
 
 - Adding docker compose file for sqlserver
